@@ -1,0 +1,26 @@
+jenkins:
+  securityRealm: # Define User accts and roles
+    local:
+      allowsSignup: false
+      users:
+       - id: ${JENKINS_ADMIN_ID}
+         password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy: # Define permisions for users
+    globalMatrix:
+      permissions:
+        - "Overall/Read:anonymous"
+        - "Overall/Administer:authenticated"
+  remotingSecurity:
+    enabled: true
+security:
+#
+# queueItemAuthenticator Below sets up how builds are performed
+# See https://plugins.jenkins.io/authorize-project
+# 
+#  queueItemAuthenticator: # Build Authorization - Configure builds to be ran as standard users vs SYSTEM/root.
+#    authenticators:
+#      - global:
+#        strategy: triggeringUsersAuthorizationStrategy
+unclassified:
+  location: # Define hosting URL for access
+    url: http://g3gospel:8080/
