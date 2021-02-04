@@ -1,8 +1,8 @@
 # Go-Go-Gadget-Gospel
 
 #### Table of Contents
-- [Quick Start](#quick)
 - [Pre-Requisites](#prereq)
+- [Quick Start](#quick)
 - [Jenkins](#jenkins)
 
 ------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 - See inspirations.
 
 ------------------------------------------------------------------------------------
-#### Pre-requisites
+#### <a name="prereq">Pre-requisites</a>
 0. CI/CD 
 	- [What is CI/CD? - Opensource.com](https://opensource.com/article/18/8/what-cicd)
 1. Docker 
@@ -30,7 +30,7 @@
 	- [Pipeline as Code with Jenkins(jenkins.io)](https://www.jenkins.io/solutions/pipeline/)
 
 ------------------------------------------------------------------------------------
-#### Quick Start
+#### <a name="quick">Quick Start</a>
 1. Install Docker
 2. Clone repo 
 	- `git clone https://github.com/rmusser01/Go-Go-GadgetGospel`
@@ -49,7 +49,7 @@
 
 
 ------------------------------------------------------------------------------------
-### Jenkins 
+### <a name="jenkins">Jenkins</a>
 1. Install Docker.
 2. Run/Launch Master
 	- See Run.sh
