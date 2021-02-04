@@ -8,11 +8,11 @@ echo -en "Run these commands unless you know what you want to do:\n\n"
 echo -en "Build the dockerfile:\n"
 echo -en 'docker build -t jenkins:jcasc . \n\n' 
 echo -en 'Execute the Container with No Persistence:\n'
-echo -en 'docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:jcasc\n\n'
+echo -en 'docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1\n\n'
 echo -en 'Jenkins Persistence using Docker Volumes:\n'
-echo -en 'docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:jcasc\n\n'
+echo -en 'docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1\n\n'
 echo -en 'Run the container saving to raw disk\n'
-echo -en '"docker run -u <username_to_run_container_as> --name jenkins -p 8080:8080 -v /home/<USERNAME_HERE>:/var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:jcasc"\n\n'
+echo -en '"docker run -u <username_to_run_container_as> --name jenkins -p 8080:8080 -v /home/<USERNAME_HERE>:/var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1"\n\n'
 echo -en 'Increase the amount of RAM available to the JVM:\n --env JAVA_OPTS="-Xmx4096m"'
 #sleep 30
 exit
@@ -65,7 +65,7 @@ keystore_pass=storepsswrd
 rm -f $JENKINS_KEYSTORE_FILE
 
 
-# Keep this directory for persistency
+# Keep this directory for persistence
 volume_base=`dirname $(pwd)`/run/jenkins_home
 
 

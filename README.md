@@ -35,17 +35,29 @@
 2. Clone repo 
 	- `git clone https://github.com/rmusser01/Go-Go-GadgetGospel`
 3. Build + Run 'Master' Jenkins instance
-	- `cd ./Master/ && docker build -t jenkins:jcasc .`
-	- With Persistence: `docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:jcasc`
-	- No Persistence: `docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:jcasc`
+	- Move into cloned directory and build initial master
+		- `cd ./Master/ && docker build -t jenkins:master-1 .`
+	- With Persistence: 
+		* `docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
+	- No Persistence: 
+		* `docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
 4. Build + Run the 'Slave' Jenkins Instance 
-	- `cd ./Build-Agents/ && docker build -t jenkins:builder-1
-	- (No Persistence) `docker run --name jenkins-builder-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:builder-1`
-		- `--rm` - remove after execution
-		- `-d` - run as daemon
-		- `-t` - `Allocate a pseudo-tty`
-		- `-i` - Keep STDIN open even if not attached`
-		- `-p` - set external:internal port mapping (External SSH is over port `12390`)
+	- Move into Build-Agents Folder and Build container:
+		* `cd ./Build-Agents/ && docker build -t jenkins:builder-1`
+	- Run the Build-Agent with No Persistence:
+		- `docker run --name jenkins-builder-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:builder-1`
+			- `--rm` - remove after execution
+			- `-d` - run as daemon
+			- `-t` - `Allocate a pseudo-tty`
+			- `-i` - Keep STDIN open even if not attached
+			- `-p` - set external:internal port mapping (External SSH is over port `12390`)
+	- Verify it's working:
+		* `ssh jenkins@<IP_HERE> -p 12390`
+		* password: `jenkins`
+5. Configure the Build-Agent on the Master instance of Jenkins using:
+	- SSH if following above instructions.
+	- Docker if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
+6. Get to building/testing!
 
 
 ------------------------------------------------------------------------------------
