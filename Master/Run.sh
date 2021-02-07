@@ -6,13 +6,13 @@
 
 echo -en "Run these commands unless you know what you want to do:\n\n"
 echo -en "Build the dockerfile:\n"
-echo -en 'docker build -t jenkins:jcasc . \n\n' 
+echo -en 'docker build -t jenkins:Master -f ./J-LTS.Dockerfile .\n\n' 
 echo -en 'Execute the Container with No Persistence:\n'
-echo -en 'docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1\n\n'
+echo -en 'docker run --name Jenkins-Master-1-NP --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:Master\n\n'
 echo -en 'Jenkins Persistence using Docker Volumes:\n'
-echo -en 'docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1\n\n'
+echo -en 'docker run --name Jenkins-Master-1-P -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1\n\n'
 echo -en 'Run the container saving to raw disk\n'
-echo -en '"docker run -u <username_to_run_container_as> --name jenkins -p 8080:8080 -v /home/<USERNAME_HERE>:/var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1"\n\n'
+echo -en '"docker run -u <username_to_run_container_as> --name Jenkins-Master-1-R -p 8080:8080 -v /home/<USERNAME_HERE>:/var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1"\n\n'
 echo -en 'Increase the amount of RAM available to the JVM:\n --env JAVA_OPTS="-Xmx4096m"'
 #sleep 30
 exit
@@ -80,7 +80,7 @@ volume_base=`dirname $(pwd)`/run/jenkins_home
 
 #
 # Fancy Version with Certs
-docker build -t jenkins:jcasc .
+docker build -t jenkins:Master -f ./J-LTS.Dockerfile .
 docker run --name GDS --rm  -p 443:8443 -v $volume_base:/var/jenkins_home --env JENKINS_ADMIN_ID=$JENKINS_INITIAL_ADMIN_NAME --env JENKINS_ADMIN_PASSWORD="$psswrd" jenkins:jcasc --httpPort=-1 --httpsPort=8443 --httpsKeyStore=/usr/share/jenkins/ref/jenkins_keystore.jks --httpsKeyStorePassword="$keystore_pass"
 
 

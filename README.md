@@ -8,6 +8,8 @@
 ------------------------------------------------------------------------------------
 #### What is this?
 - Simple CI/CD setup for Jenkins using Docker + containers.
+- End result is a Jenkins Master, running in a docker container, based off the 'Official' container image, with build-agents/slaves available for instantiation on Windows or Linux, also using docker/containers.
+	* Master instance is pre-configured with several plugins, so that if desired, you can spin up the Master instance and build locally, if you don't need Windows.
 
 ------------------------------------------------------------------------------------
 #### Why?
@@ -27,7 +29,21 @@
 2. Jenkins 
 	- [Jenkins User Documentation](https://www.jenkins.io/doc/)
 	- [Jenkins tutorialspoint](https://www.tutorialspoint.com/jenkins/jenkins_overview.htm)
-	- [Pipeline as Code with Jenkins(jenkins.io)](https://www.jenkins.io/solutions/pipeline/)
+	- Jenkins Pipelines
+		- [Pipeline as Code with Jenkins(jenkins.io)](https://www.jenkins.io/solutions/pipeline/)
+		- [Pipeline Syntax - jenkins.io](https://www.jenkins.io/doc/book/pipeline/syntax/)
+		- [Creating your first Pipeline - jenkins.io](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
+		- [Job DSL Plugin](https://plugins.jenkins.io/job-dsl/)
+		- [Using a Jenkinsfile - jenkins.io](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/)
+		- [Running multiple steps - jenkins.io](https://www.jenkins.io/doc/pipeline/tour/running-multiple-steps/)
+3. Containers on Windows
+	- [Containers on Windows documentation - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/)
+	- [Windows container requirements - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/system-requirements)
+	- [Get started: Prep Windows for containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/quick-start/set-up-environment)
+	- [Frequently asked questions about containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/faq)
+		- See air-gap usage of Windows containers
+	- [Dockerfile on Windows - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-docker/manage-windows-dockerfile)
+	- [Isolation Modes - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container)
 
 ------------------------------------------------------------------------------------
 #### <a name="quick">Quick Start</a>
@@ -36,7 +52,7 @@
 	- `git clone https://github.com/rmusser01/Go-Go-GadgetGospel`
 3. Build + Run 'Master' Jenkins instance
 	- Move into cloned directory and build initial master
-		- `cd ./Master/ && docker build -t jenkins:master-1 .`
+		- `cd ./Master/ && docker build -t jenkins:Master -f ./J-LTS.Dockerfile .`
 	- With Persistence: 
 		* `docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
 	- No Persistence: 
@@ -56,6 +72,7 @@
 		* password: `jenkins`
 5. Configure the Build-Agent on the Master instance of Jenkins using:
 	- SSH if following above instructions.
+		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
 	- Docker if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
 6. Get to building/testing!
 
@@ -68,13 +85,20 @@
 3. Configure Master
 	- Additional users
 	- User permissions
+		- FIXME - Matrix plugin
 	- Plugins (Updates and adding 'Docker')
+		- SSH
+			* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
+			* [SSH-Slaves](https://github.com/jenkinsci/ssh-slaves-plugin/blob/master/doc/CONFIGURE.md)
+			* []Docker-SSH-Agent](https://github.com/jenkinsci/docker-ssh-agent)
 	- Fix hostname
-	- Other stuff
+	- Agents & Distributed Builds
+		* [Using Jenkins agents - Jenkins.io](https://www.jenkins.io/doc/book/using/using-agents/)
+		* [Distributed builds - Jenkins wiki](https://wiki.jenkins.io/display/JENKINS/Distributed+builds)
 3. Run/Launch Slave-1
 	- See Build_Plain_Runner.sh
 4. Configure Slave on Master
-	- See here [How to Configure Docker Container as Build Slaves for Jenkins - Naren Chejara]( https://narenchejara.medium.com/how-to-configure-docker-container-as-build-slaves-for-jenkins-d7795f78402d) for a guide on using Docker to host your build-slave and being able to instantiate it from the 'Master' instance.
+	- See here [How to Configure Docker Container as Build Slaves for Jenkins - Naren Chejara](https://narenchejara.medium.com/how-to-configure-docker-container-as-build-slaves-for-jenkins-d7795f78402d) for a guide on using Docker to host your build-slave and being able to instantiate it from the 'Master' instance.
 
 ------------------------------------------------------------------------------------
 #### Inspirations

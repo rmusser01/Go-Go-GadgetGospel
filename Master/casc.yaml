@@ -5,6 +5,8 @@ jenkins:
       users:
        - id: ${JENKINS_ADMIN_ID}
          password: ${JENKINS_ADMIN_PASSWORD}
+       - id: SampleID
+         password: SamplePassword
   authorizationStrategy: # Define permisions for users
     globalMatrix:
       permissions:
