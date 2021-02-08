@@ -1,9 +1,20 @@
 # Go-Go-Gadget-Gospel
 
+------------------------------------------------------------------------------------
 #### Table of Contents
 - [Pre-Requisites](#prereq)
 - [Quick Start](#quick)
-- [Jenkins](#jenkins)
+- [Instruction on Setting up Jenkins](#jenkins)
+- [Setting up a Build Pipeline with Jenkins](#buildjenkins)
+	- [C](#clang)
+	- [C++](#cplus)
+	- [Go](#golang)
+	- [.NET - Linux](#netlin)
+	- [.NET - Windows](#netwin)
+	- [PowerShell](#pslang)
+	- [Python](#pylang)
+- [Inspirations](#inspirations)
+
 
 ------------------------------------------------------------------------------------
 #### What is this?
@@ -31,11 +42,17 @@
 	- [Jenkins tutorialspoint](https://www.tutorialspoint.com/jenkins/jenkins_overview.htm)
 	- Jenkins Pipelines
 		- [Pipeline as Code with Jenkins(jenkins.io)](https://www.jenkins.io/solutions/pipeline/)
-		- [Pipeline Syntax - jenkins.io](https://www.jenkins.io/doc/book/pipeline/syntax/)
-		- [Creating your first Pipeline - jenkins.io](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
-		- [Job DSL Plugin](https://plugins.jenkins.io/job-dsl/)
+		- [Getting Started with Pipeline](https://www.jenkins.io/doc/book/pipeline/getting-started)
 		- [Using a Jenkinsfile - jenkins.io](https://www.jenkins.io/doc/book/pipeline/jenkinsfile/)
+		- [Creating your first Pipeline - jenkins.io](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
+		- [Pipeline Syntax - jenkins.io](https://www.jenkins.io/doc/book/pipeline/syntax/)
+		- [Pipeline Steps Reference - jenkins.io](https://www.jenkins.io/doc/pipeline/steps/)
+		- [Pipeline Examples - jenkins.io](https://www.jenkins.io/doc/pipeline/examples/)
 		- [Running multiple steps - jenkins.io](https://www.jenkins.io/doc/pipeline/tour/running-multiple-steps/)
+	- [Jenkins Jobs DSL](https://plugins.jenkins.io/job-dsl/)
+		* `"Job DSL was one of the first popular plugins for Jenkins which allows managing configuration as code and many other plugins dealing with this aspect have been created since then, most notably the Jenkins Pipeline and Configuration as Code plugins. It is important to understand the differences between these plugins and Job DSL for managing Jenkins configuration efficiently. Jenkins Pipeline is often the better choice for creating complex automated processes. Job DSL can be used to create Pipeline and Multibranch Pipeline jobs. Do not confuse Job DSL with Pipeline DSL, both have their own syntax and scope of application. The Configuration as Code plugin can be used to manage the global system configuration of Jenkins. It comes with an integration for Job DSL to create an initial set of jobs."`
+			* The casc plugin is already setup/installed in the base/master image.
+		- [Job DSL Plugin](https://plugins.jenkins.io/job-dsl/)
 3. Containers on Windows
 	- [Containers on Windows documentation - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/)
 	- [Windows container requirements - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/system-requirements)
@@ -58,18 +75,33 @@
 	- No Persistence: 
 		* `docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
 4. Build + Run the 'Slave' Jenkins Instance 
-	- Move into Build-Agents Folder and Build container:
-		* `cd ./Build-Agents/ && docker build -t jenkins:builder-1`
-	- Run the Build-Agent with No Persistence:
-		- `docker run --name jenkins-builder-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:builder-1`
-			- `--rm` - remove after execution
-			- `-d` - run as daemon
-			- `-t` - `Allocate a pseudo-tty`
-			- `-i` - Keep STDIN open even if not attached
-			- `-p` - set external:internal port mapping (External SSH is over port `12390`)
-	- Verify it's working:
-		* `ssh jenkins@<IP_HERE> -p 12390`
-		* password: `jenkins`
+	- Linux
+		- Move into Build-Agents Folder and Build container:
+			* `cd ./Build-Agents/Linux/ && docker build -t jenkins:U18LTS -f ./U18LTS.Dockerfile .`
+		- Run the Build-Agent with No Persistence:
+			- `docker run --name JB-L-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:U18LTS`
+				- `--rm` - remove after execution
+				- `-d` - run as daemon
+				- `-t` - `Allocate a pseudo-tty`
+				- `-i` - Keep STDIN open even if not attached
+				- `-p` - set external:internal port mapping (External SSH is over port `12390`)
+		- Verify it's working:
+			* `ssh jenkins@<IP_HERE> -p 12390`
+			* password: `jenkins`
+	- Windows
+		- In order to use containers on Windows, you'll need docker installed, along with Hyper-V. This assumes you've already done the prep work.
+		- Move into Build-Agents Folder and build the Windows build-agent container:
+			* `cd ./Build-Agents/Windows/ && docker build -t <FIXME> -f ./<FIXME> .`
+		- Run the Build-Agent with No Persistence:
+			- `docker run --name JB-W-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:U18LTS`
+				- `--rm` - remove after execution
+				- `-d` - run as daemon
+				- `-t` - `Allocate a pseudo-tty`
+				- `-i` - Keep STDIN open even if not attached
+				- `-p` - set external:internal port mapping (External SSH is over port `12390`)
+		- Verify it's working:
+			* `ssh jenkins@<IP_HERE> -p 12390`
+			* password: `jenkins`
 5. Configure the Build-Agent on the Master instance of Jenkins using:
 	- SSH if following above instructions.
 		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
@@ -78,7 +110,7 @@
 
 
 ------------------------------------------------------------------------------------
-### <a name="jenkins">Jenkins</a>
+### <a name="jenkins"> Instructions on Setting up Jenkins</a>
 1. Install Docker.
 2. Run/Launch Master
 	- See Run.sh
@@ -101,7 +133,28 @@
 	- See here [How to Configure Docker Container as Build Slaves for Jenkins - Naren Chejara](https://narenchejara.medium.com/how-to-configure-docker-container-as-build-slaves-for-jenkins-d7795f78402d) for a guide on using Docker to host your build-slave and being able to instantiate it from the 'Master' instance.
 
 ------------------------------------------------------------------------------------
-#### Inspirations
+### <a name="buildjenkins"> Setting up a Build Pipeline with Jenkins</a>
+* **Setting up a pipeline for C(Linux & Windows)**<a name="clang"></a>
+	* **101**
+* **Setting up a pipeline for C++(Linux & Windows)**<a name="cplus"></a>
+	* **101**
+* **Setting up a pipeline for Go(Linux & Windows)**<a name="golang"></a>
+	* **101**
+* **Setting up a pipeline for .NET(Linux & Windows)**<a name="netlin"></a>
+	* **101**
+* **Setting up a pipeline for .NET(Windows)**<a name="netwin"></a>
+	* **101**
+* **Setting up a pipeline for PowerShell(Windows)**<a name="pslang"></a>
+	* **101**
+* **Setting up a pipeline for Python(Linux & Windows)**	<a name="pylang"></a>
+
+
+
+
+
+
+------------------------------------------------------------------------------------
+#### Inspirations<a name="inspirations"></a>
 * **Articles**
 	* [Jenkins - More than Just Target Practice - FortyNorth Security](https://fortynorthsecurity.com/blog/jenkins-more-than-just-target-practice/)
 	* [Using Azure Pipelines to validate my Sysmon configuration - Olaf Harton(2020)](https://medium.com/falconforce/using-azure-pipelines-to-validate-my-sysmon-configuration-48315dba7571)
