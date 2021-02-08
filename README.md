@@ -113,20 +113,23 @@
 ------------------------------------------------------------------------------------
 #### <a name="githost">Setting up Git Hosting</a>
 * **Using Gitea**
-	* **Setup**
 	* **Documentation**
 		* [Gitea](https://github.com/go-gitea/gitea)
 		* [Gitea with Docker](https://docs.gitea.io/en-us/install-with-docker-rootless/)
+	* **Setup**
 		* Create a docker Volume for persistence:
 			* `docker volume create gitea`
-		* Build the Image:
-			* F
-		* Run the container:
-			* `docker run -p 11001:3000 -p 11002:22 -v gitea:/data --restart always <Docker_Image_Name>`
+		* Build and Run the Image:
+			* `cd ./Supporting/Git/ && chmod 775 Run-Tea.sh & ./Run-Tea.sh`
+		* Or just pull and run a prebuilt from a Registry: https://hub.docker.com/r/gitea/gitea/
+			* `docker run --name Git-Tea -p 11001:3000 -p 11002:22 -v gitea:/data --env USER_UID=1000 --env USER_GID=1000 gitea:latest`
+		* Finish setting up by visiting `localhost:11001`, or the IP of the machine exposing the docker instance.
 * **Using Gitlab**
 * **Using ?**
 	* F
 
+
+docker run gitea:latest
 
 
 ------------------------------------------------------------------------------------
