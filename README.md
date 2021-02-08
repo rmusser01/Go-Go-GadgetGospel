@@ -4,6 +4,7 @@
 #### Table of Contents
 - [Pre-Requisites](#prereq)
 - [Quick Start](#quick)
+- [Setting up Git Hosting](#githost)
 - [Setting up Jenkins](#jenkins)
 - [Setting up a Build Pipeline with Jenkins](#buildjenkins)
 	- [C](#clang)
@@ -106,6 +107,26 @@
 		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
 	- Docker if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
 6. Get to building/testing!
+
+
+
+------------------------------------------------------------------------------------
+#### <a name="githost">Setting up Git Hosting</a>
+* **Using Gitea**
+	* **Setup**
+	* **Documentation**
+		* [Gitea](https://github.com/go-gitea/gitea)
+		* [Gitea with Docker](https://docs.gitea.io/en-us/install-with-docker-rootless/)
+		* Create a docker Volume for persistence:
+			* `docker volume create gitea`
+		* Build the Image:
+			* F
+		* Run the container:
+			* `docker run -p 11001:3000 -p 11002:22 -v gitea:/data --restart always <Docker_Image_Name>`
+* **Using Gitlab**
+* **Using ?**
+	* F
+
 
 
 ------------------------------------------------------------------------------------
