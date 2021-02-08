@@ -9,8 +9,7 @@
 	- [C](#clang)
 	- [C++](#cplus)
 	- [Go](#golang)
-	- [.NET - Linux](#netlin)
-	- [.NET - Windows](#netwin)
+	- [.NET](#netlin)
 	- [PowerShell](#pslang)
 	- [Python](#pylang)
 
@@ -53,13 +52,21 @@
 			* The casc plugin is already setup/installed in the base/master image.
 		- [Job DSL Plugin](https://plugins.jenkins.io/job-dsl/)
 3. Containers on Windows
-	- [Containers on Windows documentation - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/)
-	- [Windows container requirements - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/system-requirements)
-	- [Get started: Prep Windows for containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/quick-start/set-up-environment)
-	- [Frequently asked questions about containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/faq)
-		- See air-gap usage of Windows containers
-	- [Dockerfile on Windows - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-docker/manage-windows-dockerfile)
-	- [Isolation Modes - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container)
+	- 101/Getting Started Documentation:
+		- [Containers on Windows documentation - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/)
+		- [Windows container requirements - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/system-requirements)
+		- [Get started: Prep Windows for containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/quick-start/set-up-environment)
+		- [Frequently asked questions about containers - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/faq)
+			- See air-gap usage of Windows containers
+				- [dockerd daemon - docs.docker.com](https://docs.docker.com/engine/reference/commandline/dockerd/)
+					- Search for `Allow push of nondistributable artifacts` in the above link
+		- [Dockerfile on Windows - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-docker/manage-windows-dockerfile)
+		- [Isolation Modes - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container)
+	- Windows Containers
+		- [Container Base Images - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images)
+		- [Windows Nano Server Container Image - hub.docker](https://hub.docker.com/_/microsoft-windows-servercore)
+		- [Windows Server Core Container Image - hub.docker](https://hub.docker.com/_/microsoft-windows-servercore)
+
 
 ------------------------------------------------------------------------------------
 #### <a name="quick">Quick Start</a>
