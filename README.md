@@ -99,15 +99,8 @@
 		- Move into Build-Agents Folder and build the Windows build-agent container:
 			* `cd ./Build-Agents/Windows/ && docker build -t <FIXME> -f ./<FIXME> .`
 		- Run the Build-Agent with No Persistence:
-			- `docker run --name JB-W-1 --rm -d -ti -p 12390:22 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:U18LTS`
-				- `--rm` - remove after execution
-				- `-d` - run as daemon
-				- `-t` - `Allocate a pseudo-tty`
-				- `-i` - Keep STDIN open even if not attached
-				- `-p` - set external:internal port mapping (External SSH is over port `12390`)
+			- `docker run --name <FIXME>`
 		- Verify it's working:
-			* `ssh jenkins@<IP_HERE> -p 12390`
-			* password: `jenkins`
 5. Configure the Build-Agent on the Master instance of Jenkins using:
 	- SSH if following above instructions.
 		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
