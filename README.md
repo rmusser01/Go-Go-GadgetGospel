@@ -106,8 +106,8 @@
 	- SSH if following above instructions.
 		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
 	- Docker if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
+5. OPTIONAL: Setup self-hosted git instance.
 6. Get to building/testing!
-
 
 
 ------------------------------------------------------------------------------------
@@ -124,12 +124,6 @@
 		* Or just pull and run a prebuilt from a Registry: https://hub.docker.com/r/gitea/gitea/
 			* `docker run --name Git-Tea -p 11001:3000 -p 11002:22 -v gitea:/data --env USER_UID=1000 --env USER_GID=1000 gitea:latest`
 		* Finish setting up by visiting `localhost:11001`, or the IP of the machine exposing the docker instance.
-* **Using Gitlab**
-* **Using ?**
-	* F
-
-
-docker run gitea:latest
 
 
 ------------------------------------------------------------------------------------
