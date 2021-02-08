@@ -134,25 +134,11 @@
 ------------------------------------------------------------------------------------
 ### <a name="buildjenkins"> Setting up a Build Pipeline with Jenkins</a>
 * **Setting up a pipeline for C(Linux & Windows)**<a name="clang"></a>
-	* **101**
-	* **F**
-		* https://github.com/skeeto/w64devkit
 * **Setting up a pipeline for C++(Linux & Windows)**<a name="cplus"></a>
-	* **101**
-	* **F**
-		* https://github.com/skeeto/w64devkit
 * **Setting up a pipeline for Go(Linux & Windows)**<a name="golang"></a>
-	* **101**
 * **Setting up a pipeline for .NET(Linux & Windows)**<a name="netlin"></a>
-	* **101**
-	* **F**
-		* https://stackoverflow.com/questions/41533592/how-to-compile-net-core-app-for-linux-on-a-windows-machine
-		* https://ubuntu.com/blog/creating-cross-platform-applications-with-net-on-ubuntu-on-wsl
-		* https://docs.microsoft.com/en-us/dotnet/core/install/linux
 * **Setting up a pipeline for .NET(Windows)**<a name="netwin"></a>
-	* **101**
 * **Setting up a pipeline for PowerShell(Windows)**<a name="pslang"></a>
-	* **101**
 * **Setting up a pipeline for Python(Linux & Windows)**	<a name="pylang"></a>
 
 
