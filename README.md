@@ -4,7 +4,7 @@
 #### Table of Contents
 - [Pre-Requisites](#prereq)
 - [Quick Start](#quick)
-- [Instruction on Setting up Jenkins](#jenkins)
+- [Setting up Jenkins](#jenkins)
 - [Setting up a Build Pipeline with Jenkins](#buildjenkins)
 	- [C](#clang)
 	- [C++](#cplus)
@@ -13,7 +13,6 @@
 	- [.NET - Windows](#netwin)
 	- [PowerShell](#pslang)
 	- [Python](#pylang)
-- [Inspirations](#inspirations)
 
 
 ------------------------------------------------------------------------------------
@@ -136,12 +135,20 @@
 ### <a name="buildjenkins"> Setting up a Build Pipeline with Jenkins</a>
 * **Setting up a pipeline for C(Linux & Windows)**<a name="clang"></a>
 	* **101**
+	* **F**
+		* https://github.com/skeeto/w64devkit
 * **Setting up a pipeline for C++(Linux & Windows)**<a name="cplus"></a>
 	* **101**
+	* **F**
+		* https://github.com/skeeto/w64devkit
 * **Setting up a pipeline for Go(Linux & Windows)**<a name="golang"></a>
 	* **101**
 * **Setting up a pipeline for .NET(Linux & Windows)**<a name="netlin"></a>
 	* **101**
+	* **F**
+		* https://stackoverflow.com/questions/41533592/how-to-compile-net-core-app-for-linux-on-a-windows-machine
+		* https://ubuntu.com/blog/creating-cross-platform-applications-with-net-on-ubuntu-on-wsl
+		* https://docs.microsoft.com/en-us/dotnet/core/install/linux
 * **Setting up a pipeline for .NET(Windows)**<a name="netwin"></a>
 	* **101**
 * **Setting up a pipeline for PowerShell(Windows)**<a name="pslang"></a>
@@ -154,7 +161,7 @@
 
 
 ------------------------------------------------------------------------------------
-#### Inspirations<a name="inspirations"></a>
+#### Inspirations
 * **Articles**
 	* [Jenkins - More than Just Target Practice - FortyNorth Security](https://fortynorthsecurity.com/blog/jenkins-more-than-just-target-practice/)
 	* [Using Azure Pipelines to validate my Sysmon configuration - Olaf Harton(2020)](https://medium.com/falconforce/using-azure-pipelines-to-validate-my-sysmon-configuration-48315dba7571)
