@@ -11,9 +11,10 @@
 	- [C++](#cplus)
 	- [Go](#golang)
 	- [.NET](#netlin)
+	- [Nim](#nim)
 	- [PowerShell](#pslang)
 	- [Python](#pylang)
-
+	- [Rust](#rustlang)
 
 ------------------------------------------------------------------------------------
 #### What is this?
@@ -67,22 +68,22 @@
 		- [Container Base Images - docs.ms](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images)
 		- [Windows Nano Server Container Image - hub.docker](https://hub.docker.com/_/microsoft-windows-servercore)
 		- [Windows Server Core Container Image - hub.docker](https://hub.docker.com/_/microsoft-windows-servercore)
-
+		- [Windows Docker Agent Images: General Availability - jenkins.io(2020)](https://www.jenkins.io/blog/2020/05/11/docker-windows-agents/)
 
 ------------------------------------------------------------------------------------
 #### <a name="quick">Quick Start</a>
-1. Install Docker
-2. Clone repo 
+1. **Install Docker**
+2. **Clone repo**
 	- `git clone https://github.com/rmusser01/Go-Go-GadgetGospel`
-3. Build + Run 'Master' Jenkins instance
+3. **Build + Run 'Master' Jenkins instance**
 	- Move into cloned directory and build initial master
 		- `cd ./Master/ && docker build -t jenkins:Master -f ./J-LTS.Dockerfile .`
 	- With Persistence: 
 		* `docker run --name jenkins -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
 	- No Persistence: 
 		* `docker run --name jenkins --rm -p 8080:8080 -v /var/jenkins_home --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=password jenkins:master-1`
-4. Build + Run the 'Slave' Jenkins Instance 
-	- Linux
+4. **Build + Run the 'Slave' Jenkins Instance**
+	- **Linux**
 		- Move into Build-Agents Folder and Build container:
 			* `cd ./Build-Agents/Linux/ && docker build -t jenkins:U18LTS -f ./U18LTS.Dockerfile .`
 		- Run the Build-Agent with No Persistence:
@@ -95,19 +96,55 @@
 		- Verify it's working:
 			* `ssh jenkins@<IP_HERE> -p 12390`
 			* password: `jenkins`
-	- Windows
+	- **Windows**
 		- In order to use containers on Windows, you'll need docker installed, along with Hyper-V. This assumes you've already done the prep work.
-		- Move into Build-Agents Folder and build the Windows build-agent container:
-			* `cd ./Build-Agents/Windows/ && docker build -t <FIXME> -f ./<FIXME> .`
-		- Run the Build-Agent with No Persistence:
-			- `docker run --name <FIXME>`
-		- Verify it's working:
-5. Configure the Build-Agent on the Master instance of Jenkins using:
-	- SSH if following above instructions.
-		* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
-	- Docker if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
-5. OPTIONAL: Setup self-hosted git instance.
-6. Get to building/testing!
+		- Building Locally from Scractch:
+			- Move into Build-Agents Folder and build the Windows build-agent container:
+				* `cd ./Build-Agents/Windows/ && docker build -t <FIXME> -f ./<FIXME> .`
+			- Run the Build-Agent with No Persistence:
+				- `docker run --name <FIXME>`
+			- Verify it's working:
+				- `<FIXME>`
+		- Building Locally from Jenkins images:
+			- Move into the appropriate Build-Agents Folder:
+				- `cd ./Build-Agents/Windows/`
+			- Build 
+		- Pulling from the Docker Public Registry and using the official Jenkins Docker image for Slaves/Build-Agents.
+			- Pull from Registry:
+				- Jenkins Agent Docker image (jenkinsci/slave/)
+					- https://hub.docker.com/r/jenkinsci/slave/
+					- `docker pull jenkinsci/slave`
+				- Docker image for Jenkins agents connected over SSH (jenkinsci/ssh-agent)
+					- https://hub.docker.com/r/jenkins/ssh-agent
+					- `docker pull jenkinsci/slave` docker run jenkins/ssh-agent "<public key>"
+
+			- On the master, set up the new build-agent/slave and then configure the `Remote root directory` to `C:\Users\jenkins\Agent`
+			- 'Normal' agent Docker machine:
+				- `docker run -i --rm --name agent --init jenkins/agent:windowsservercore-ltsc2019-jdk11 java -jar C:/ProgramData/Jenkins/agent.jar`
+			- SSH-Agent
+				- `docker run jenkins/ssh-agent:windowsservercore-ltsc2019-jdk11 "<public key>"` 
+					- `<public key>` being the SSH public key of your master server/instance.
+5. **Configure the Build-Agent(s) on the Master instance of Jenkins:**
+	- There are several different means of having Agents/Slaves communicate with the master instance.
+		- SSH
+			...if following above instructions.
+				* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
+		- Docker
+			...if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
+		- JNLP
+			- Requires GUI interaction.
+		- WMI/DCOM
+			...if you're using Windows.
+6. **OPTIONAL: Setup self-hosted git instance.**
+	* **Using Gitea from repo:**
+		* Create a docker Volume for persistence:
+			* `docker volume create gitea`
+		* Build and Run the Image:
+			* `cd ./Supporting/Git/ && chmod 775 Run-Tea.sh & ./Run-Tea.sh`
+		* Or just pull and run a prebuilt from a Registry: https://hub.docker.com/r/gitea/gitea/
+			* `docker run --name Git-Tea -p 11001:3000 -p 11002:22 -v gitea:/data --env USER_UID=1000 --env USER_GID=1000 gitea:latest`
+		* Finish setting up by visiting `localhost:11001`, or the IP of the machine exposing the docker instance.
+7. **Get to building/testing!**
 
 
 ------------------------------------------------------------------------------------
@@ -151,18 +188,26 @@
 
 ------------------------------------------------------------------------------------
 ### <a name="buildjenkins"> Setting up a Build Pipeline with Jenkins</a>
-* **Setting up a pipeline for C(Linux & Windows)**<a name="clang"></a>
-* **Setting up a pipeline for C++(Linux & Windows)**<a name="cplus"></a>
-* **Setting up a pipeline for Go(Linux & Windows)**<a name="golang"></a>
-* **Setting up a pipeline for .NET(Linux & Windows)**<a name="netlin"></a>
-* **Setting up a pipeline for .NET(Windows)**<a name="netwin"></a>
-* **Setting up a pipeline for PowerShell(Windows)**<a name="pslang"></a>
-* **Setting up a pipeline for Python(Linux & Windows)**	<a name="pylang"></a>
-
-
-
-
-
+* **Setting up a pipeline for C (Linux & Windows)**<a name="clang"></a>
+	* You should be able to handle it.
+* **Setting up a pipeline for C++ (Linux & Windows)**<a name="cplus"></a>
+	* [C++](https://www.jenkins.io/blog/2017/07/07/jenkins-conan/)
+* **Setting up a pipeline for Go (Linux & Windows)**<a name="golang"></a>
+	* [Go](https://www.jenkins.io/doc/pipeline/tour/hello-world/#go)
+* **Setting up a pipeline for Java**<a name="javalang"></a>
+	* [Java](https://www.jenkins.io/doc/pipeline/tour/hello-world/#java)
+* **Setting up a pipeline for .NET (Linux & Windows)**<a name="netlin"></a>
+	* [.NET (Linux)](https://medium.com/@babaknia/build-net-core-projects-with-jenkins-for-linux-63a16f2a3414)
+* **Setting up a pipeline for .NET (Windows)**<a name="netwin"></a>
+	* [.NET (Windows)](https://www.c-sharpcorner.com/article/continuous-deployment-with-jenkins-and-net/)
+* **Setting up a pipeline for Nim**<a name="nimlang"></a>
+	* [Nim](https://github.com/nim-lang/Nim)
+* **Setting up a pipeline for PowerShell (Windows)**<a name="pslang"></a>
+	* [PowerShell(2017)](https://www.jenkins.io/blog/2017/07/26/powershell-pipeline/)
+* **Setting up a pipeline for Python (Linux & Windows)**	<a name="pylang"></a>
+	* [Python](https://www.jenkins.io/doc/pipeline/tour/hello-world/#python)
+* **Setting up a pipeline for Rust**<a name="rustlang"></a>
+	* [Rust](https://fuzzyblog.io/blog/cicd/2020/06/05/setting-up-ci-cd-with-jenkins-blue-ocean-github-for-a-rust-program.html)
 
 ------------------------------------------------------------------------------------
 #### Inspirations
@@ -178,4 +223,9 @@
 	* [Offensive Development: Post Exploitation Tradecraft in an EDR World - Dominic Chell(x33fCon2020)](https://www.youtube.com/watch?v=GHmOJhpMw_o)
 		* You spend days or even weeks perfecting the perfect phish; your campaign has a targeted pre-text, a slick initial access payload and it slips through perimeter defences right in to your target's inbox. Moments later, your C2 pings and your beacon is awake - you're in, it's time to explore! You start by probing the endpoint, checking your privileges and getting your bearings in the network. Suddenly, silence... your beacon has stopped responding, your infrastructure is burned and you have to start over.  Command line logging, PowerShell logging, sysmon, EDR, EDP, app whitelisting, AMSI, the blue team has it all and you're playing on their turf. Unless your post-exploitation game is at it's peak, you shall not pass.  During this talk we will explore post-exploitation tradecraft, reviewing the opsec pitfalls that commonly lead to detection in mature environments as well as how to significantly reduce the indicators of compromise. It will demonstrate how DevOps principles can be applied to red teaming, focusing on the implementation of a custom CI/CD pipeline to automatically consume, build and deploy existing and custom tooling to an environment in a manner agnostic to any command and control framework. This approach also provides the operator with the capability to programmatically and automatically protect their tools from DFIR, safeguarding intellectual property and operational infrastructure when an artifact is dropped to disk.  The future of red teaming is offensive development.
 * `+` Others
+
+
+
+
+
 
