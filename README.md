@@ -127,10 +127,10 @@
 5. **Configure the Build-Agent(s) on the Master instance of Jenkins:**
 	- There are several different means of having Agents/Slaves communicate with the master instance.
 		- SSH
-			...if following above instructions.
+			* ...if following above instructions.
 				* Need to manually copy SSH public key from master to slave agent's `~/.ssh/authorized_keys` file.
 		- Docker
-			...if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
+			* ...if you want to instead follow the strategy of having a Jenkins master, which can call out to a pre-provisioned/configured Docker host, which can then launch docker containers to act as build-agents on command.
 		- JNLP
 			- Requires GUI interaction.
 		- WMI/DCOM
